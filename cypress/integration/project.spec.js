@@ -48,22 +48,60 @@ describe('Seu site deve possuir uma barra superior com um título', () => {
   })
 
   it(String.raw`O título deve possuir o ID "titulo" e ser uma tag h1`, () => {
-    cy.get('#cabecalho h1#titulo').should('exist')
+    cy.get('#cabecalho h1#titulo')
+      .should('exist')
+  })
+})
+
+describe('A página deve possuir uma foto sua', () => {
+  setup('/', { width: 1366, height: 768 })
+
+  it(String.raw`A foto deve ser inserida utilizando uma tag img com o ID "minha_foto"`, () => {
+    cy.get('img#minha_foto')
+      .should('have.attr', 'src');
+  })
+})
+
+describe('A página deve possuir uma lista de lições aprendidas', () => {
+  setup('/', { width: 1366, height: 768 })
+
+  it(String.raw`A lista deve ser numerada e possuir o ID "licoes_aprendidas"`, () => {
+    cy.get('ol#licoes_aprendidas')
+      .should('exist');
   })
 
+  it("A lista deve possuir 10 itens", () => {
+    cy.get('ol#licoes_aprendidas')
+      .find('li')
+      .should('have.length', 10);
+  })
+})
+
+describe('A página deve possuir uma lista de lições que ainda deseja aprender', () => {
+  setup('/', { width: 1366, height: 768 })
+
+  it(String.raw`A lista não deve ser numerada e deve possuir o ID "licoes_a_aprender"`, () => {
+    cy.get('ul#licoes_a_aprender')
+      .should('exist');
+  })
+
+  it("A lista deve possuir 10 itens", () => {
+    cy.get('ul#licoes_a_aprender')
+      .find('li')
+      .should('have.length', 10);
+  })
+})
+
+describe('A página deve possuir um rodapé', () => {
+  setup('/', { width: 1366, height: 768 })
+
+  it(String.raw`O rodapé deve possuir o ID "rodape"`, () => {
+    cy.get('footer#rodape')
+    .should('exist')
+  })
 })
 
 // describe('HTML and CSS Project', () => {
-//   it('O corpo da página deve possuir uma cor (diferente da cor branca) como cor de fundo', () => {
-//     cy.visit('./index.html');
-//     cy.get('body').should('not.have.css', 'backgroundColor', 'rgb(255, 255, 255)');
-//   });
-
-//   it('A página deve possuir uma barra superior fixa com o ID "cabecalho"', () => {
-//     cy.visit('./index.html');
-//     cy.get('header#cabecalho').should('have.css','position','fixed');
-//     cy.get('header#cabecalho').should('exist');
-//   });
 
 //   it('A página deve possuir um rodapé com o ID "rodape"', () => {
 //     cy.visit('./index.html');
