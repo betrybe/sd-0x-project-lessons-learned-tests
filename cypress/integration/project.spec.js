@@ -7,6 +7,8 @@ const screenConfig = {
   height: 768,
 };
 
+const semanticTags = ['article', 'header', 'nav', 'section', 'aside', 'footer']
+
 const isSidebySide = (firstSide, secondSide) => {
   firstSide.bottom = firstSide.top + firstSide.height;
   secondSide.bottom = secondSide.top + secondSide.height;
@@ -29,7 +31,7 @@ const shouldExist = (selector, itText) => {
   })
 }
 
-const verifyStyles = (styles) => {
+const verifyExistingStyle = (styles) => {
   cy.readFile('./style.css').then((content) => {
     console.log(styles)
     console.log(content)
@@ -37,16 +39,14 @@ const verifyStyles = (styles) => {
   });
 }
 
-const semanticTags = ['article', 'header', 'nav', 'section', 'aside', 'footer']
-
-describe('O corpo da página deve ter possuir uma cor que seja diferente da cor branca como cor de fundo', () => {
+describe('O corpo da página deve possuir uma cor de fundo especifíca', () => {
   setup('/', screenConfig)
 
   //Descobrir como escreve esse teste fazendo com que ele valide o fato de não ter cor alguma
 
-  it("Possuir cor de fundo diferente de branco", () => {
+  it("Possuir cor de fundo: rgb(253, 251, 251)", () => {
     cy.get('body')
-      .should('not.have.css', 'backgroundColor', 'rgb(255, 255, 255)')
+      .should('have.css', 'backgroundColor', 'rgb(233, 244, 233)')
   })
 })
 
@@ -101,6 +101,7 @@ describe('A página deve possuir um rodapé', () => {
   setup('/', screenConfig)
 
   shouldExist('ul#licoes_a_aprender', String.raw`O rodapé deve possuir o ID "rodape"`)
+  
   it(String.raw`O rodapé deve possuir o ID "rodape"`, () => {
     cy.get('footer#rodape')
       .should('exist')
@@ -138,10 +139,7 @@ describe('A página deve possuir pelo menos um link externo', () => {
 describe('Crie um artigo sobre seu aprendizado', () => {
   setup('/', screenConfig)
 
-  it("A `tag` `article` devem ser utilizadas", () => {
-    cy.get("article")
-      .should('exist');
-  })
+  shouldExist('article', "A `tag` `article` devem ser utilizadas")
 
   it("O artigo deve ter mais de 300 letras e menos de 600", () => {
     cy.get("article")
@@ -156,10 +154,7 @@ describe('Crie um artigo sobre seu aprendizado', () => {
 describe('Crie uma seção que conta uma passagem sobre seu aprendizado', () => {
   setup('/', screenConfig)
 
-  it("A `tag` `aside` deve ser utilizada", () => {
-    cy.get("aside")
-      .should('exist');
-  })
+  shouldExist('aside', "A `tag` `aside` deve ser utilizada")
 
   it("A seção deve ter mais que 100 letras e menos que 300", () => {
     cy.get("aside")
@@ -218,7 +213,7 @@ describe('Altere atributos relacionados as fontes', () => {
       /font:/,
       /font-size:/,
     ]
-    verifyStyles(styles)
+    verifyExistingStyle(styles)
   });
 
   it('Altere a cor da letra', () => {
@@ -226,7 +221,7 @@ describe('Altere atributos relacionados as fontes', () => {
       /font:/,
       /[^-]color:/,
     ]
-    verifyStyles(styles)
+    verifyExistingStyle(styles)
   });
 
   it('Altere o espaçamento entre as linhas', () => {
@@ -234,7 +229,7 @@ describe('Altere atributos relacionados as fontes', () => {
       /font:/,
       /line-height:/,
     ]
-    verifyStyles(styles)
+    verifyExistingStyle(styles)
   });
 
   it('Altere o `font-family`', () => {
@@ -242,7 +237,7 @@ describe('Altere atributos relacionados as fontes', () => {
         /font:/,
         /font-family:/,
       ]
-      verifyStyles(styles)
+      verifyExistingStyle(styles)
   });
 })
 
