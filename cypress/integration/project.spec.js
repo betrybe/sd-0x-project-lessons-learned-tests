@@ -1,6 +1,18 @@
-const evaluateOffset = (doc, selector, offsetType) => {
-  return doc.querySelector(selector)[`offset${offsetType}`];
-};
+const requirement1 = 'O corpo da página deve possuir uma cor de fundo especifíca';
+const requirement2 = 'Seu site deve possuir uma barra superior com um título';
+const requirement3 = 'A página deve possuir uma foto sua';
+const requirement4 = 'A página deve possuir uma lista de lições aprendidas';
+const requirement5 = 'A página deve possuir uma lista de lições que ainda deseja aprender';
+const requirement6 = 'A página deve possuir um rodapé';
+const requirement7 = 'A página deve possuir pelo menos um link externo';
+const requirement8 = 'Crie um artigo sobre seu aprendizado';
+const requirement9 = 'Crie uma seção que conta uma passagem sobre seu aprendizado';
+const requirement10 = 'Torne o seu site mais acessível e melhore seu ranqueamento em mecanismos de busca na Web aplicando os elementos HTML de acordo com o sentido e propósito de cada um deles';
+const requirement11 = 'Seu site deve passar sem problemas na verificação de semântica do site achecker';
+const requirementBonus12 = 'Adicione uma tabela à página';
+const requirementBonus13 = 'Brinque com o Box model!';
+const requirementBonus14 = 'Altere atributos relacionados as fontes';
+const requirementBonus15 = 'Faça com que seu artigo e seção sobre aprendizados fiquem um ao lado do outro';
 
 const screenConfig = {
   width: 1366,
@@ -8,6 +20,10 @@ const screenConfig = {
 };
 
 const semanticTags = ['article', 'header', 'nav', 'section', 'aside', 'footer']
+
+const evaluateOffset = (doc, selector, offsetType) => {
+  return doc.querySelector(selector)[`offset${offsetType}`];
+};
 
 const isSidebySide = (firstSide, secondSide) => {
   firstSide.bottom = firstSide.top + firstSide.height;
@@ -39,10 +55,8 @@ const verifyExistingStyle = (styles) => {
   });
 }
 
-describe('O corpo da página deve possuir uma cor de fundo especifíca', () => {
+describe(requirement1, () => {
   setup('/', screenConfig)
-
-  //Descobrir como escreve esse teste fazendo com que ele valide o fato de não ter cor alguma
 
   it("Possuir cor de fundo: rgb(253, 251, 251)", () => {
     cy.get('body')
@@ -50,7 +64,7 @@ describe('O corpo da página deve possuir uma cor de fundo especifíca', () => {
   })
 })
 
-describe('Seu site deve possuir uma barra superior com um título', () => {
+describe(requirement2, () => {
   setup('/', screenConfig)
 
   shouldExist('#cabecalho', String.raw`A barra deve possuir o ID "cabecalho"`, )
@@ -64,7 +78,7 @@ describe('Seu site deve possuir uma barra superior com um título', () => {
   shouldExist('#cabecalho h1#titulo', String.raw`O título deve possuir o ID "titulo" e ser uma tag h1`)
 })
 
-describe('A página deve possuir uma foto sua', () => {
+describe(requirement3, () => {
   setup('/', screenConfig)
 
   it(String.raw`A foto deve ser inserida utilizando uma tag img com o ID "minha_foto"`, () => {
@@ -73,7 +87,7 @@ describe('A página deve possuir uma foto sua', () => {
   })
 })
 
-describe('A página deve possuir uma lista de lições aprendidas', () => {
+describe(requirement4, () => {
   setup('/', screenConfig)
 
   shouldExist('ol#licoes_aprendidas', String.raw`A lista deve ser numerada e possuir o ID "licoes_aprendidas"`)
@@ -85,7 +99,7 @@ describe('A página deve possuir uma lista de lições aprendidas', () => {
   })
 })
 
-describe('A página deve possuir uma lista de lições que ainda deseja aprender', () => {
+describe(requirement5, () => {
   setup('/', screenConfig)
 
   shouldExist('ul#licoes_a_aprender', String.raw`A lista não deve ser numerada e deve possuir o ID "licoes_a_aprender"`)
@@ -97,7 +111,7 @@ describe('A página deve possuir uma lista de lições que ainda deseja aprender
   })
 })
 
-describe('A página deve possuir um rodapé', () => {
+describe(requirement6, () => {
   setup('/', screenConfig)
 
   shouldExist('ul#licoes_a_aprender', String.raw`O rodapé deve possuir o ID "rodape"`)
@@ -108,7 +122,7 @@ describe('A página deve possuir um rodapé', () => {
   })
 })
 
-describe('A página deve possuir pelo menos um link externo', () => {
+describe(requirement7, () => {
   setup('/', screenConfig)
 
   it("A configuração desse link deve ser feita para abrir em uma nova aba do navegador", () => {
@@ -122,21 +136,7 @@ describe('A página deve possuir pelo menos um link externo', () => {
   })
 })
 
-describe('A página deve possuir pelo menos um link externo', () => {
-  setup('/', screenConfig)
-
-  it("A configuração desse link deve ser feita para abrir em uma nova aba do navegador", () => {
-    cy.get('a')
-      .then((a) => {
-        const actual = Array.from(a).some(element => (
-          element.target === '_blank' && element.href !== ''
-        ));
-        expect(actual).to.be.true
-      });
-  })
-})
-
-describe('Crie um artigo sobre seu aprendizado', () => {
+describe(requirement8, () => {
   setup('/', screenConfig)
 
   shouldExist('article', "A `tag` `article` devem ser utilizadas")
@@ -151,7 +151,7 @@ describe('Crie um artigo sobre seu aprendizado', () => {
   })
 })
 
-describe('Crie uma seção que conta uma passagem sobre seu aprendizado', () => {
+describe(requirement9, () => {
   setup('/', screenConfig)
 
   shouldExist('aside', "A `tag` `aside` deve ser utilizada")
@@ -166,7 +166,7 @@ describe('Crie uma seção que conta uma passagem sobre seu aprendizado', () => 
   })
 })
 
-describe('Torne o seu site mais acessível e melhore seu ranqueamento em mecanismos de busca na Web aplicando os elementos HTML de acordo com o sentido e propósito de cada um deles', () => {
+describe(requirement10, () => {
   setup('/', screenConfig)
 
   semanticTags.forEach(element => {
@@ -174,7 +174,7 @@ describe('Torne o seu site mais acessível e melhore seu ranqueamento em mecanis
   })
 })
 
-describe('Seu site deve passar sem problemas na verificação de semântica do site achecker', () => {
+describe(requirement11, () => {
   it("Seu site deve passar sem problemas na verificação de semântica do site achecker", () => {
     cy.readFile('./index.html').then((content) => {
       cy.visit('https://achecker.ca/checker/index.php');
@@ -188,13 +188,13 @@ describe('Seu site deve passar sem problemas na verificação de semântica do s
 
 // Bônus
 
-describe('Adicione uma tabela à página', () => {
+describe(requirementBonus12, () => {
   setup('/', screenConfig)
 
   shouldExist('table', 'A página deve possuir uma tabela')
 })
 
-describe('Brinque com o Box model!', () => {
+describe(requirementBonus13, () => {
   setup('/', screenConfig)
 
   it('Altere `margin`, `padding` e `border` dos elementos para ver, na prática, como esses atributos influenciam e melhoram a visualização dos componentes', () => {
@@ -205,7 +205,7 @@ describe('Brinque com o Box model!', () => {
   });
 })
 
-describe('Altere atributos relacionados as fontes', () => {
+describe(requirementBonus14, () => {
   setup('/', screenConfig)
 
   it('Altere o tamanho da letra', () => {
@@ -241,7 +241,7 @@ describe('Altere atributos relacionados as fontes', () => {
   });
 })
 
-describe('Faça com que seu artigo e seção sobre aprendizados fiquem um ao lado do outro', () => {
+describe(requirementBonus15, () => {
 
   setup('/', screenConfig)
 
