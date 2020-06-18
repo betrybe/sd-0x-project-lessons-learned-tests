@@ -11,8 +11,8 @@ const isSidebySide = (firstSide, secondSide) => {
   firstSide.bottom = firstSide.top + firstSide.height;
   secondSide.bottom = secondSide.top + secondSide.height;
 
-  return ( firstSide.top >= secondSide.top && firstSide.bottom <= secondSide.bottom ) ||
-    ( secondSide.top >= firstSide.top && secondSide.bottom <= firstSide.bottom )
+  return (firstSide.top >= secondSide.top && firstSide.bottom <= secondSide.bottom) ||
+    (secondSide.top >= firstSide.top && secondSide.bottom <= firstSide.bottom)
 };
 
 const setup = (path, { width, height }) => {
@@ -22,39 +22,50 @@ const setup = (path, { width, height }) => {
   })
 }
 
+const shouldExist = (selector, itText) => {
+  it(itText, () => {
+    cy.get(selector)
+      .should('exist');
+  })
+}
+
+const verifyStyles = (styles) => {
+  cy.readFile('./style.css').then((content) => {
+    console.log(styles)
+    console.log(content)
+    expect(styles.some(style => content.match(style)), `Do not match styles ${styles}`).to.be.true
+  });
+}
+
+const semanticTags = ['article', 'header', 'nav', 'section', 'aside', 'footer']
+
 describe('O corpo da página deve ter possuir uma cor que seja diferente da cor branca como cor de fundo', () => {
   setup('/', screenConfig)
-  
+
   //Descobrir como escreve esse teste fazendo com que ele valide o fato de não ter cor alguma
 
-  it("Cor de fundo diferente de branco", () => {
+  it("Possuir cor de fundo diferente de branco", () => {
     cy.get('body')
       .should('not.have.css', 'backgroundColor', 'rgb(255, 255, 255)')
   })
 })
 
 describe('Seu site deve possuir uma barra superior com um título', () => {
-  setup('/', { width: 1366, height: 768 })
+  setup('/', screenConfig)
 
-  it(String.raw`A barra deve possuir o ID "cabecalho"`, () => {
-    cy.get('#cabecalho')
-      .should('exist');
-  })
+  shouldExist('#cabecalho', String.raw`A barra deve possuir o ID "cabecalho"`, )
 
   it("A barra superior deve ser fixa no topo da página", () => {
     cy.get('#cabecalho')
-      .should('have.css','position','fixed')
+      .should('have.css', 'position', 'fixed')
       .should('have.css', 'top', '0px');
   })
-
-  it(String.raw`O título deve possuir o ID "titulo" e ser uma tag h1`, () => {
-    cy.get('#cabecalho h1#titulo')
-      .should('exist')
-  })
+  
+  shouldExist('#cabecalho h1#titulo', String.raw`O título deve possuir o ID "titulo" e ser uma tag h1`)
 })
 
 describe('A página deve possuir uma foto sua', () => {
-  setup('/', { width: 1366, height: 768 })
+  setup('/', screenConfig)
 
   it(String.raw`A foto deve ser inserida utilizando uma tag img com o ID "minha_foto"`, () => {
     cy.get('img#minha_foto')
@@ -63,12 +74,9 @@ describe('A página deve possuir uma foto sua', () => {
 })
 
 describe('A página deve possuir uma lista de lições aprendidas', () => {
-  setup('/', { width: 1366, height: 768 })
+  setup('/', screenConfig)
 
-  it(String.raw`A lista deve ser numerada e possuir o ID "licoes_aprendidas"`, () => {
-    cy.get('ol#licoes_aprendidas')
-      .should('exist');
-  })
+  shouldExist('ol#licoes_aprendidas', String.raw`A lista deve ser numerada e possuir o ID "licoes_aprendidas"`)
 
   it("A lista deve possuir 10 itens", () => {
     cy.get('ol#licoes_aprendidas')
@@ -78,12 +86,9 @@ describe('A página deve possuir uma lista de lições aprendidas', () => {
 })
 
 describe('A página deve possuir uma lista de lições que ainda deseja aprender', () => {
-  setup('/', { width: 1366, height: 768 })
+  setup('/', screenConfig)
 
-  it(String.raw`A lista não deve ser numerada e deve possuir o ID "licoes_a_aprender"`, () => {
-    cy.get('ul#licoes_a_aprender')
-      .should('exist');
-  })
+  shouldExist('ul#licoes_a_aprender', String.raw`A lista não deve ser numerada e deve possuir o ID "licoes_a_aprender"`)
 
   it("A lista deve possuir 10 itens", () => {
     cy.get('ul#licoes_a_aprender')
@@ -93,101 +98,175 @@ describe('A página deve possuir uma lista de lições que ainda deseja aprender
 })
 
 describe('A página deve possuir um rodapé', () => {
-  setup('/', { width: 1366, height: 768 })
+  setup('/', screenConfig)
 
+  shouldExist('ul#licoes_a_aprender', String.raw`O rodapé deve possuir o ID "rodape"`)
   it(String.raw`O rodapé deve possuir o ID "rodape"`, () => {
     cy.get('footer#rodape')
-    .should('exist')
+      .should('exist')
   })
 })
 
-// describe('HTML and CSS Project', () => {
+describe('A página deve possuir pelo menos um link externo', () => {
+  setup('/', screenConfig)
 
-//   it('A página deve possuir um rodapé com o ID "rodape"', () => {
-//     cy.visit('./index.html');
-//     cy.get('body>footer#rodape').should('exist');
-//   });
+  it("A configuração desse link deve ser feita para abrir em uma nova aba do navegador", () => {
+    cy.get('a')
+      .then((a) => {
+        const actual = Array.from(a).some(element => (
+          element.target === '_blank' && element.href !== ''
+        ));
+        expect(actual).to.be.true
+      });
+  })
+})
 
-//   it('A página deve possuir pelo menos uma imagem criada com a tag "img"', () => {
-//     cy.visit('./index.html');
-//     cy.get('img').should('have.attr', 'src');
-//   });
+describe('A página deve possuir pelo menos um link externo', () => {
+  setup('/', screenConfig)
 
-//   it('A página deve possuir duas listas, uma ordenada e a outra não', () => {
-//     cy.visit('./index.html');
-//     cy.get('ol').should('exist');
-//     cy.get('ul').should('exist');
-//   });
+  it("A configuração desse link deve ser feita para abrir em uma nova aba do navegador", () => {
+    cy.get('a')
+      .then((a) => {
+        const actual = Array.from(a).some(element => (
+          element.target === '_blank' && element.href !== ''
+        ));
+        expect(actual).to.be.true
+      });
+  })
+})
 
-//   it('A página deve possuir pelo menos um link externo (não se esqueça de configurar a abertura desse link em uma nova aba)', () => {
-//     cy.visit('./index.html');
-//     cy.get('a')
-//     .then((a) => {
-//       const actual = Array.from(a).some(element => (
-//         element.target === '_blank' && element.href !== ''
-//       ));
-//       expect(actual).to.be.true
-//     });
-//   });
+describe('Crie um artigo sobre seu aprendizado', () => {
+  setup('/', screenConfig)
 
-//   it('Torne o seu site mais acessível e melhore seu ranqueamento em mecanismos de busca na Web aplicando os elementos HTML de acordo com o sentido e propósito de cada um deles', () => {
-//     cy.visit('./index.html');
-//     cy.get('header').should('exist');
-//     cy.get('nav').should('exist');
-//     cy.get('aside').should('exist');
-//     cy.get('article').should('exist');
-//     cy.get('section').should('exist');
-//     cy.get('footer').should('exist');
-//   });
+  it("A `tag` `article` devem ser utilizadas", () => {
+    cy.get("article")
+      .should('exist');
+  })
 
-//   it("Seu site deve passar sem problemas na verificação de semântica do site achecker", () => {
-//     cy.readFile('./index.html').then((content) => {
-//       cy.visit('https://achecker.ca/checker/index.php');
-//       cy.contains('Paste HTML Markup').click();
-//       cy.get('textarea').type(content);
-//       cy.get('#validate_paste').click();
-//       cy.contains('Congratulations! No known problems.');
-//     });
-//   });
+  it("O artigo deve ter mais de 300 letras e menos de 600", () => {
+    cy.get("article")
+      .invoke('text')
+      .then((text) => {
+        expect(text).to.have.length.of.at.most(600)
+        expect(text).to.have.length.of.at.above(300)
+      })
+  })
+})
 
-//   it('Adicione uma tabela à página', () => {
-//     cy.visit('./index.html');
-//     cy.get('table').should('exist');
-//   });
+describe('Crie uma seção que conta uma passagem sobre seu aprendizado', () => {
+  setup('/', screenConfig)
 
-//   it('Altere margin, padding e border dos elementos para ver, na prática, como esses atributos influenciam e melhoram a visualização dos componentes', () => {
-//     cy.readFile('./style.css').then((content) => {
-//       const styles = ['margin', 'padding', 'border']
-//       expect(styles.every(style => content.match(style))).to.be.true
-//     });
-//   });
+  it("A `tag` `aside` deve ser utilizada", () => {
+    cy.get("aside")
+      .should('exist');
+  })
 
-//   it('Altere atributos relacionados as fontes, como por exemplo, tamanho, cor, alinhamento, decoração (itálico, negrito, sublinhado etc)', () => {
-//     cy.readFile('./style.css').then((content) => {
-//       const styles = [
-//         /[^-]color:/,
-//         /font:/,
-//         /font-(family|size|stretch|style|variant|weight):/,
-//         /line-height:/
-//       ]
-//       expect(styles.some(style => content.match(style))).to.be.true
-//     });
-//   });
+  it("A seção deve ter mais que 100 letras e menos que 300", () => {
+    cy.get("aside")
+      .invoke('text')
+      .then((text) => {
+        expect(text).to.have.length.of.at.above(100)
+        expect(text).to.have.length.of.at.most(300)
+      })
+  })
+})
 
-//   it('Organize componentes para ficarem dispostos lado a lado na página com as classes "lado-esquerdo" e "lado-direito" respectivamente', () => {
-//     cy.visit('./index.html');
-//     cy.document().then(doc => {
-//       const leftSide = {
-//         top: evaluateOffset(doc, '.lado-esquerdo', 'Top'),
-//         height: evaluateOffset(doc, '.lado-esquerdo', 'Height')
-//       }
+describe('Torne o seu site mais acessível e melhore seu ranqueamento em mecanismos de busca na Web aplicando os elementos HTML de acordo com o sentido e propósito de cada um deles', () => {
+  setup('/', screenConfig)
 
-//       const rightSide = {
-//         top: evaluateOffset(doc, '.lado-direito', 'Top'),
-//         height: evaluateOffset(doc, '.lado-direito', 'Height')
-//       }
+  semanticTags.forEach(element => {
+    shouldExist(element, `A página deve possuir um elemento '${element}'`)
+  })
+})
 
-//       expect(isSidebySide(leftSide, rightSide)).to.be.true;
-//     })
-//   });
-// });
+describe('Seu site deve passar sem problemas na verificação de semântica do site achecker', () => {
+  it("Seu site deve passar sem problemas na verificação de semântica do site achecker", () => {
+    cy.readFile('./index.html').then((content) => {
+      cy.visit('https://achecker.ca/checker/index.php');
+      cy.contains('Paste HTML Markup').click();
+      cy.get('textarea').type(content);
+      cy.get('#validate_paste').click();
+      cy.contains('Congratulations! No known problems.');
+    });
+  });
+})
+
+// Bônus
+
+describe('Adicione uma tabela à página', () => {
+  setup('/', screenConfig)
+
+  shouldExist('table', 'A página deve possuir uma tabela')
+})
+
+describe('Brinque com o Box model!', () => {
+  setup('/', screenConfig)
+
+  it('Altere `margin`, `padding` e `border` dos elementos para ver, na prática, como esses atributos influenciam e melhoram a visualização dos componentes', () => {
+    cy.readFile('./style.css').then((content) => {
+      const styles = ['margin', 'padding', 'border']
+      expect(styles.every(style => content.match(style)), "Do not match styles margin, padding and border").to.be.true
+    });
+  });
+})
+
+describe('Altere atributos relacionados as fontes', () => {
+  setup('/', screenConfig)
+
+  it('Altere o tamanho da letra', () => {
+    const styles = [
+      /font:/,
+      /font-size:/,
+    ]
+    verifyStyles(styles)
+  });
+
+  it('Altere a cor da letra', () => {
+    const styles = [
+      /font:/,
+      /[^-]color:/,
+    ]
+    verifyStyles(styles)
+  });
+
+  it('Altere o espaçamento entre as linhas', () => {
+    const styles = [
+      /font:/,
+      /line-height:/,
+    ]
+    verifyStyles(styles)
+  });
+
+  it('Altere o `font-family`', () => {
+      const styles = [
+        /font:/,
+        /font-family:/,
+      ]
+      verifyStyles(styles)
+  });
+})
+
+describe('Faça com que seu artigo e seção sobre aprendizados fiquem um ao lado do outro', () => {
+
+  setup('/', screenConfig)
+
+  shouldExist(".lado-esquerdo", "Utilizar a classe 'lado-esquerdo'")
+
+  shouldExist(".lado-direito", "Utilizar a classe 'lado-direito'")
+
+  it('Verificar se os elementos com as classes lado-direito e lado-esquerdo estão posicionados corretamente', () => {
+    cy.document().then(doc => {
+      const leftSide = {
+        top: evaluateOffset(doc, '.lado-esquerdo', 'Top'),
+        height: evaluateOffset(doc, '.lado-esquerdo', 'Height')
+      }
+
+      const rightSide = {
+        top: evaluateOffset(doc, '.lado-direito', 'Top'),
+        height: evaluateOffset(doc, '.lado-direito', 'Height')
+      }
+
+      expect(isSidebySide(leftSide, rightSide), "Not side by side. *hint - search for float, width and positioning properties to achieve this requirement*").to.be.true;
+    })
+  });
+});
