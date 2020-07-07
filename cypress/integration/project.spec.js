@@ -1,4 +1,4 @@
-const requirement1 = 'O corpo da página deve possuir uma cor de fundo especifíca';
+const requirement1 = 'O corpo da página deve possuir uma cor de fundo específica';
 const requirement2 = 'Seu site deve possuir uma barra superior com um título';
 const requirement3 = 'A página deve possuir uma foto sua';
 const requirement4 = 'A página deve possuir uma lista de lições aprendidas';
@@ -14,11 +14,6 @@ const requirementBonus13 = 'Brinque com o Box model!';
 const requirementBonus14 = 'Altere atributos relacionados as fontes';
 const requirementBonus15 = 'Faça com que seu artigo e seção sobre aprendizados fiquem um ao lado do outro';
 
-const screenConfig = {
-  width: 1366,
-  height: 768,
-};
-
 const semanticTags = ['article', 'header', 'nav', 'section', 'aside', 'footer']
 
 const evaluateOffset = (doc, selector, offsetType) => {
@@ -33,9 +28,8 @@ const isSidebySide = (firstSide, secondSide) => {
     (secondSide.top >= firstSide.top && secondSide.bottom <= firstSide.bottom)
 };
 
-const setup = (path, { width, height }) => {
+const setup = (path) => {
   beforeEach(() => {
-    cy.viewport(width, height);
     cy.visit(path);
   })
 }
@@ -56,30 +50,30 @@ const verifyExistingStyle = (styles) => {
 }
 
 describe(requirement1, () => {
-  setup('/', screenConfig)
+  setup('/')
 
   it("Possuir cor de fundo: rgb(253, 251, 251)", () => {
     cy.get('body')
-      .should('have.css', 'backgroundColor', 'rgb(233, 244, 233)')
+      .should('have.css', 'backgroundColor', 'rgb(253, 251, 251)')
   })
 })
 
 describe(requirement2, () => {
-  setup('/', screenConfig)
+  setup('/')
 
   shouldExist('#cabecalho', String.raw`A barra deve possuir o ID "cabecalho"`, )
 
-  it("A barra superior deve ser fixa no topo da página", () => {
+  it("A barra superior deve ser fixa no topo da página, com a propriedade top tendo `0px`", () => {
     cy.get('#cabecalho')
       .should('have.css', 'position', 'fixed')
       .should('have.css', 'top', '0px');
   })
   
-  shouldExist('#cabecalho h1#titulo', String.raw`O título deve possuir o ID "titulo" e ser uma tag h1`)
+  shouldExist('#cabecalho h1#titulo', String.raw`O título deve estar dentro da barra e possuir o ID "titulo", além de ser uma tag 'h1'`)
 })
 
 describe(requirement3, () => {
-  setup('/', screenConfig)
+  setup('/')
 
   it(String.raw`A foto deve ser inserida utilizando uma tag img com o ID "minha_foto"`, () => {
     cy.get('img#minha_foto')
@@ -88,7 +82,7 @@ describe(requirement3, () => {
 })
 
 describe(requirement4, () => {
-  setup('/', screenConfig)
+  setup('/')
 
   shouldExist('ol#licoes_aprendidas', String.raw`A lista deve ser numerada e possuir o ID "licoes_aprendidas"`)
 
@@ -100,7 +94,7 @@ describe(requirement4, () => {
 })
 
 describe(requirement5, () => {
-  setup('/', screenConfig)
+  setup('/')
 
   shouldExist('ul#licoes_a_aprender', String.raw`A lista não deve ser numerada e deve possuir o ID "licoes_a_aprender"`)
 
@@ -123,7 +117,7 @@ describe(requirement6, () => {
 })
 
 describe(requirement7, () => {
-  setup('/', screenConfig)
+  setup('/')
 
   it("A configuração desse link deve ser feita para abrir em uma nova aba do navegador", () => {
     cy.get('a')
@@ -137,7 +131,7 @@ describe(requirement7, () => {
 })
 
 describe(requirement8, () => {
-  setup('/', screenConfig)
+  setup('/')
 
   shouldExist('article', "A `tag` `article` devem ser utilizadas")
 
@@ -152,7 +146,7 @@ describe(requirement8, () => {
 })
 
 describe(requirement9, () => {
-  setup('/', screenConfig)
+  setup('/')
 
   shouldExist('aside', "A `tag` `aside` deve ser utilizada")
 
@@ -167,7 +161,7 @@ describe(requirement9, () => {
 })
 
 describe(requirement10, () => {
-  setup('/', screenConfig)
+  setup('/')
 
   semanticTags.forEach(element => {
     shouldExist(element, `A página deve possuir um elemento '${element}'`)
@@ -189,13 +183,13 @@ describe(requirement11, () => {
 // Bônus
 
 describe(requirementBonus12, () => {
-  setup('/', screenConfig)
+  setup('/')
 
   shouldExist('table', 'A página deve possuir uma tabela')
 })
 
 describe(requirementBonus13, () => {
-  setup('/', screenConfig)
+  setup('/')
 
   it('Altere `margin`, `padding` e `border` dos elementos para ver, na prática, como esses atributos influenciam e melhoram a visualização dos componentes', () => {
     cy.readFile('./style.css').then((content) => {
@@ -206,7 +200,7 @@ describe(requirementBonus13, () => {
 })
 
 describe(requirementBonus14, () => {
-  setup('/', screenConfig)
+  setup('/')
 
   it('Altere o tamanho da letra', () => {
     const styles = [
@@ -243,7 +237,7 @@ describe(requirementBonus14, () => {
 
 describe(requirementBonus15, () => {
 
-  setup('/', screenConfig)
+  setup('/')
 
   shouldExist(".lado-esquerdo", "Utilizar a classe 'lado-esquerdo'")
 
