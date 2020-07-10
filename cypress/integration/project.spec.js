@@ -107,8 +107,6 @@ describe(requirement5, () => {
 
 describe(requirement6, () => {
   setup('/')
-
-  shouldExist('ul#licoes_a_aprender', String.raw`O rodapé deve possuir o ID "rodape"`)
   
   it(String.raw`O rodapé deve possuir o ID "rodape"`, () => {
     cy.get('footer#rodape')
