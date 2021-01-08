@@ -137,8 +137,9 @@ describe(requirement8, () => {
     cy.get("article")
       .invoke('text')
       .then((text) => {
-        expect(text).to.have.length.of.at.most(600)
-        expect(text).to.have.length.of.at.above(300)
+        const filteredText = text.replace(/\s+/g, ' ').trim()
+        expect(filteredText).to.have.length.of.at.most(600)
+        expect(filteredText).to.have.length.of.at.above(300)
       })
   })
 })
@@ -152,8 +153,9 @@ describe(requirement9, () => {
     cy.get("aside")
       .invoke('text')
       .then((text) => {
-        expect(text).to.have.length.of.at.above(100)
-        expect(text).to.have.length.of.at.most(300)
+        const filteredText = text.replace(/\s+/g, ' ').trim()
+        expect(filteredText).to.have.length.of.at.above(100)
+        expect(filteredText).to.have.length.of.at.most(300)
       })
   })
 })
