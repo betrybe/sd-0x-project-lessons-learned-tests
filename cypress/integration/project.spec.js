@@ -133,7 +133,7 @@ describe(requirement8, () => {
 
   shouldExist('article', "A `tag` `article` devem ser utilizadas")
 
-  it("O artigo deve ter mais de 300 letras e menos de 600", () => {
+  it("O artigo deve ter mais de 300 caracteres e menos de 600", () => {
     cy.get("article")
       .invoke('text')
       .then((text) => {
@@ -148,7 +148,7 @@ describe(requirement9, () => {
 
   shouldExist('aside', "A `tag` `aside` deve ser utilizada")
 
-  it("A seção deve ter mais que 100 letras e menos que 300", () => {
+  it("A seção deve ter mais que 100 caracteres e menos que 300", () => {
     cy.get("aside")
       .invoke('text')
       .then((text) => {
