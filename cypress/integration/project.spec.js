@@ -1,18 +1,18 @@
-const requirement1 = 'O corpo da página deve possuir uma cor de fundo específica';
-const requirement2 = 'Seu site deve possuir uma barra superior com um título';
-const requirement3 = 'A página deve possuir uma foto sua';
-const requirement4 = 'A página deve possuir uma lista de lições aprendidas';
-const requirement5 = 'A página deve possuir uma lista de lições que ainda deseja aprender';
-const requirement6 = 'A página deve possuir um rodapé';
-const requirement7 = 'A página deve possuir pelo menos um link externo';
+const requirement1 = 'Adicione uma cor de fundo específica para a página';
+const requirement2 = 'Adicione uma barra superior com um título';
+const requirement3 = 'Adicione uma foto sua à página';
+const requirement4 = 'Adicione uma lista de lições aprendidas à página';
+const requirement5 = 'Crie uma lista de lições que ainda deseja aprender para a página';
+const requirement6 = 'Adicione um rodapé para a página';
+const requirement7 = 'Insira pelo menos um link externo na página';
 const requirement8 = 'Crie um artigo sobre seu aprendizado';
 const requirement9 = 'Crie uma seção que conta uma passagem sobre seu aprendizado';
-const requirement10 = 'Torne o seu site mais acessível e melhore seu ranqueamento em mecanismos de busca na Web aplicando os elementos HTML de acordo com o sentido e propósito de cada um deles';
-const requirement11 = 'Seu site deve passar sem problemas na verificação de semântica do site achecker';
+const requirement10 = 'Aplique elementos HTML de acordo com o sentido e propósito de cada um deles';
+const requirement11 = 'Teste a semântica da sua página está aprovada pelo site achecker';
 const requirementBonus12 = 'Adicione uma tabela à página';
-const requirementBonus13 = 'Brinque com o Box model!';
+const requirementBonus13 = 'Utilize o Box model';
 const requirementBonus14 = 'Altere atributos relacionados as fontes';
-const requirementBonus15 = 'Faça com que seu artigo e seção sobre aprendizados fiquem um ao lado do outro';
+const requirementBonus15 = 'Posicione o seu artigo e a seção sobre aprendizados um ao lado do outro';
 
 const semanticTags = ['article', 'header', 'nav', 'section', 'aside', 'footer']
 
