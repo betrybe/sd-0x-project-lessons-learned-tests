@@ -1,175 +1,172 @@
-const requirement1 = 'Adicione uma cor de fundo específica para a página';
-const requirement2 = 'Adicione uma barra superior com um título';
-const requirement3 = 'Adicione uma foto sua à página';
-const requirement4 = 'Adicione uma lista de lições aprendidas à página';
-const requirement5 = 'Crie uma lista de lições que ainda deseja aprender para a página';
-const requirement6 = 'Adicione um rodapé para a página';
-const requirement7 = 'Insira pelo menos um link externo na página';
-const requirement8 = 'Crie um artigo sobre seu aprendizado';
-const requirement9 = 'Crie uma seção que conta uma passagem sobre seu aprendizado';
-const requirement10 = 'Aplique elementos HTML de acordo com o sentido e propósito de cada um deles';
-const requirement11 = 'Teste a semântica da sua página está aprovada pelo site achecker';
-const requirementBonus12 = 'Adicione uma tabela à página';
-const requirementBonus13 = 'Utilize o Box model';
-const requirementBonus14 = 'Altere atributos relacionados as fontes';
-const requirementBonus15 = 'Posicione o seu artigo e a seção sobre aprendizados um ao lado do outro';
+import {
+  shouldExist,
+} from '../actions/ActionBase';
 
-const semanticTags = ['article', 'header', 'nav', 'section', 'aside', 'footer']
-
-const evaluateOffset = (doc, selector, offsetType) => {
-  return doc.querySelector(selector)[`offset${offsetType}`];
-};
-
-const isSidebySide = (firstSide, secondSide) => {
-  firstSide.bottom = firstSide.top + firstSide.height;
-  secondSide.bottom = secondSide.top + secondSide.height;
-
-  return (firstSide.top >= secondSide.top && firstSide.bottom <= secondSide.bottom) ||
-    (secondSide.top >= firstSide.top && secondSide.bottom <= firstSide.bottom)
-};
-
-const setup = (path) => {
+describe('1 - Adicione uma cor de fundo específica para a página', () => {
   beforeEach(() => {
-    cy.visit(path);
-  })
-}
-
-const shouldExist = (selector, itText) => {
-  it(itText, () => {
-    cy.get(selector)
-      .should('exist');
-  })
-}
-
-const verifyExistingStyle = (styles) => {
-  cy.readFile('./style.css').then((content) => {
-    console.log(styles)
-    console.log(content)
-    expect(styles.some(style => content.match(style)), `Do not match styles ${styles}`).to.be.true
+    cy.visit('/');
   });
-}
 
-describe(requirement1, () => {
-  setup('/')
-
-  it("Possuir cor de fundo: rgb(253, 251, 251)", () => {
+  it('Possuir cor de fundo: rgb(253, 251, 251)', () => {
     cy.get('body')
-      .should('have.css', 'backgroundColor', 'rgb(253, 251, 251)')
-  })
-})
+      .should('have.css', 'backgroundColor', 'rgb(253, 251, 251)');
+  });
+});
 
-describe(requirement2, () => {
-  setup('/')
+describe('2 - Adicione uma barra superior com um título', () => {
+  beforeEach(() => {
+    cy.visit('/');
+  });
 
-  shouldExist('#cabecalho', String.raw`A barra deve possuir o ID "cabecalho"`, )
+  it('A barra deve possuir o ID "cabecalho"', () => {
+    shouldExist('#cabecalho');
+  });
 
-  it("A barra superior deve ser fixa no topo da página, com a propriedade top tendo `0px`", () => {
+  it('A barra superior deve ser fixa no topo da página, com a propriedade top tendo `0px`', () => {
     cy.get('#cabecalho')
       .should('have.css', 'position', 'fixed')
       .should('have.css', 'top', '0px');
-  })
-  
-  shouldExist('#cabecalho h1#titulo', String.raw`O título deve estar dentro da barra e possuir o ID "titulo", além de ser uma tag 'h1'`)
-})
+  });
 
-describe(requirement3, () => {
-  setup('/')
+  it('O título deve estar dentro da barra e possuir o ID "titulo", além de ser uma tag "h1"', () => {
+    shouldExist('#cabecalho h1#titulo');
+  });
+});
 
-  it(String.raw`A foto deve ser inserida utilizando uma tag img com o ID "minha_foto"`, () => {
-    cy.get('img#minha_foto')
-      .should('have.attr', 'src');
-  })
-})
+describe('3 - Adicione uma foto sua à página', () => {
+  beforeEach(() => {
+    cy.visit('/');
+  });
 
-describe(requirement4, () => {
-  setup('/')
+  it('A foto deve ser inserida utilizando uma tag img com o ID "minha_foto"', () => {
+    cy.get('img#minha_foto').should('have.attr', 'src');
+  });
+});
 
-  shouldExist('ol#licoes_aprendidas', String.raw`A lista deve ser numerada e possuir o ID "licoes_aprendidas"`)
+describe('4 - Adicione uma lista de lições aprendidas à página', () => {
+  beforeEach(() => {
+    cy.visit('/');
+  });
 
-  it("A lista deve possuir 10 itens", () => {
-    cy.get('ol#licoes_aprendidas')
-      .find('li')
-      .should('have.length', 10);
-  })
-})
+  it('A lista deve ser numerada e possuir o ID "licoes_aprendidas"', () => {
+    shouldExist('ol#licoes_aprendidas');
+  });
 
-describe(requirement5, () => {
-  setup('/')
+  it('A lista deve possuir 10 itens', () => {
+    cy.get('ol#licoes_aprendidas').find('li').should('have.length', 10);
+  });
+});
 
-  shouldExist('ul#licoes_a_aprender', String.raw`A lista não deve ser numerada e deve possuir o ID "licoes_a_aprender"`)
+describe('5 - Crie uma lista de lições que ainda deseja aprender para a página', () => {
+  beforeEach(() => {
+    cy.visit('/');
+  });
 
-  it("A lista deve possuir 10 itens", () => {
-    cy.get('ul#licoes_a_aprender')
-      .find('li')
-      .should('have.length', 10);
-  })
-})
+  it('A lista não deve ser numerada e deve possuir o ID "licoes_a_aprender"', () => {
+    shouldExist('ul#licoes_a_aprender');
+  });
 
-describe(requirement6, () => {
-  setup('/')
-  
-  it(String.raw`O rodapé deve possuir o ID "rodape"`, () => {
-    cy.get('footer#rodape')
-      .should('exist')
-  })
-})
+  it('A lista deve possuir 10 itens', () => {
+    cy.get('ul#licoes_a_aprender').find('li').should('have.length', 10);
+  });
+});
 
-describe(requirement7, () => {
-  setup('/')
+describe('6 - Adicione um rodapé para a página', () => {
+  beforeEach(() => {
+    cy.visit('/');
+  });
 
-  it("A configuração desse link deve ser feita para abrir em uma nova aba do navegador", () => {
+  it('O rodapé deve possuir o ID "rodape"', () => {
+    cy.get('footer#rodape').should('exist');
+  });
+});
+
+describe('7 - Insira pelo menos um link externo na página', () => {
+  beforeEach(() => {
+    cy.visit('/');
+  });
+
+  it('A configuração desse link deve ser feita para abrir em uma nova aba do navegador', () => {
     cy.get('a')
       .then((a) => {
-        const actual = Array.from(a).some(element => (
+        const actual = Array.from(a).some((element) => (
           element.target === '_blank' && element.href !== ''
         ));
-        expect(actual).to.be.true
+        expect(actual).to.be.true;
       });
-  })
-})
+  });
+});
 
-describe(requirement8, () => {
-  setup('/')
+describe('8 - Crie um artigo sobre seu aprendizado', () => {
+  beforeEach(() => {
+    cy.visit('/');
+  });
 
-  shouldExist('article', "A `tag` `article` devem ser utilizadas")
+  it('A `tag` `article` devem ser utilizadas', () => {
+    shouldExist('article');
+  });
 
-  it("O artigo deve ter mais de 300 caracteres e menos de 600", () => {
-    cy.get("article")
+  it('O artigo deve ter mais de 300 letras e menos de 600', () => {
+    cy.get('article')
       .invoke('text')
       .then((text) => {
-        const filteredText = text.replace(/\s+/g, ' ').trim()
-        expect(filteredText).to.have.length.of.at.most(600)
-        expect(filteredText).to.have.length.of.at.above(300)
-      })
-  })
-})
+        expect(text).to.have.length.of.at.most(600);
+        expect(text).to.have.length.of.at.above(300);
+      });
+  });
+});
 
-describe(requirement9, () => {
-  setup('/')
+describe('9 - Crie uma seção que conta uma passagem sobre seu aprendizado', () => {
+  beforeEach(() => {
+    cy.visit('/');
+  });
 
-  shouldExist('aside', "A `tag` `aside` deve ser utilizada")
+  it('A `tag` `aside` deve ser utilizada', () => {
+    shouldExist('aside');
+  });
 
-  it("A seção deve ter mais que 100 caracteres e menos que 300", () => {
-    cy.get("aside")
+  it('A seção deve ter mais que 100 letras e menos que 300', () => {
+    cy.get('aside')
       .invoke('text')
       .then((text) => {
-        const filteredText = text.replace(/\s+/g, ' ').trim()
-        expect(filteredText).to.have.length.of.at.above(100)
-        expect(filteredText).to.have.length.of.at.most(300)
-      })
-  })
-})
+        expect(text).to.have.length.of.at.above(100);
+        expect(text).to.have.length.of.at.most(300);
+      });
+  });
+});
 
-describe(requirement10, () => {
-  setup('/')
+describe('10 - Aplique elementos HTML de acordo com o sentido e propósito de cada um deles', () => {
+  beforeEach(() => {
+    cy.visit('/');
+  });
 
-  semanticTags.forEach(element => {
-    shouldExist(element, `A página deve possuir um elemento '${element}'`)
-  })
-})
+  it('Validar se a página possui um elemento "article"', () => {
+    shouldExist('article');
+  });
 
-describe(requirement11, () => {
-  it("Seu site deve passar sem problemas na verificação de semântica do site achecker", () => {
+  it('Validar se a página possui um elemento "header"', () => {
+    shouldExist('header');
+  });
+
+  it('Validar se a página possui um elemento "nav"', () => {
+    shouldExist('nav');
+  });
+
+  it('Validar se a página possui um elemento "section"', () => {
+    shouldExist('section');
+  });
+
+  it('Validar se a página possui um elemento "aside"', () => {
+    shouldExist('aside');
+  });
+
+  it('Validar se a página possui um elemento "footer"', () => {
+    shouldExist('footer');
+  });
+});
+
+describe('11 - Teste a semântica da sua página está aprovada pelo site achecker', () => {
+  it('Seu site deve passar sem problemas na verificação de semântica do site achecker', () => {
     cy.readFile('./index.html').then((content) => {
       cy.visit('https://achecker.ca/checker/index.php');
       cy.contains('Paste HTML Markup').click();
@@ -177,85 +174,5 @@ describe(requirement11, () => {
       cy.get('#validate_paste').click();
       cy.contains('Congratulations! No known problems.');
     });
-  });
-})
-
-// Bônus
-
-describe(requirementBonus12, () => {
-  setup('/')
-
-  shouldExist('table', 'A página deve possuir uma tabela')
-})
-
-describe(requirementBonus13, () => {
-  setup('/')
-
-  it('Altere `margin`, `padding` e `border` dos elementos para ver, na prática, como esses atributos influenciam e melhoram a visualização dos componentes', () => {
-    cy.readFile('./style.css').then((content) => {
-      const styles = ['margin', 'padding', 'border']
-      expect(styles.every(style => content.match(style)), "Do not match styles margin, padding and border").to.be.true
-    });
-  });
-})
-
-describe(requirementBonus14, () => {
-  setup('/')
-
-  it('Altere o tamanho da letra', () => {
-    const styles = [
-      /font:/,
-      /font-size:/,
-    ]
-    verifyExistingStyle(styles)
-  });
-
-  it('Altere a cor da letra', () => {
-    const styles = [
-      /font:/,
-      /[^-]color:/,
-    ]
-    verifyExistingStyle(styles)
-  });
-
-  it('Altere o espaçamento entre as linhas', () => {
-    const styles = [
-      /font:/,
-      /line-height:/,
-    ]
-    verifyExistingStyle(styles)
-  });
-
-  it('Altere o `font-family`', () => {
-      const styles = [
-        /font:/,
-        /font-family:/,
-      ]
-      verifyExistingStyle(styles)
-  });
-})
-
-describe(requirementBonus15, () => {
-
-  setup('/')
-
-  shouldExist(".lado-esquerdo", "Utilizar a classe 'lado-esquerdo'")
-
-  shouldExist(".lado-direito", "Utilizar a classe 'lado-direito'")
-
-  it('Verificar se os elementos com as classes lado-direito e lado-esquerdo estão posicionados corretamente', () => {
-    cy.document().then(doc => {
-      const leftSide = {
-        top: evaluateOffset(doc, '.lado-esquerdo', 'Top'),
-        height: evaluateOffset(doc, '.lado-esquerdo', 'Height')
-      }
-
-      const rightSide = {
-        top: evaluateOffset(doc, '.lado-direito', 'Top'),
-        height: evaluateOffset(doc, '.lado-direito', 'Height')
-      }
-
-      expect(isSidebySide(leftSide, rightSide), "Not side by side. *hint - search for float, width and positioning properties to achieve this requirement*").to.be.true;
-    })
   });
 });
